@@ -58,6 +58,7 @@ venv.bak/
 # Copy .env.example instead and paste your key locally.
 .env
 .envrc
+.env.example  # ← intentionally tracked, do not ignore
 
 # ── Packaging / tools ─────────────────────────────────────────────────────────
 .pdm-python
