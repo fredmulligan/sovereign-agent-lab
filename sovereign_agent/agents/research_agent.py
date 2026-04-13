@@ -122,7 +122,17 @@ def run_research_agent(task: str, max_turns: int = 8) -> dict:
         role    = getattr(m, "type", "unknown")
         content = m.content
 
-        # Tool-call messages have structured list content
+        # Check for tool calls on the message object (OpenAI format)
+        if hasattr(m, "tool_calls") and m.tool_calls:
+            for tc in m.tool_calls:
+                entry = {
+                    "tool": tc["name"],
+                    "args": tc.get("args", {}),
+                }
+                tool_calls_made.append(entry)
+                full_trace.append({"role": "tool_call", **entry})
+
+        # Tool-call messages have structured list content (Anthropic format)
         if isinstance(content, list):
             for block in content:
                 if isinstance(block, dict) and block.get("type") == "tool_use":
